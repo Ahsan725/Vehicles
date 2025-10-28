@@ -30,11 +30,7 @@ public class Main {
 
         System.out.println("\nCAR DRIVING");
         int carMiles = 0;
-        while (carMiles < 100) {
-            if (car.getFuelLevel() <= 0) {
-                System.out.println("Out of fuel → refuel +8");
-                car.refuel(8);
-            }
+        while (carMiles < 30 ) {
             carMiles += 10;
             System.out.println("Traveled " + carMiles + " miles");
             car.accelerate();
