@@ -4,40 +4,45 @@ public class Car extends Vehicle {
 
     public Car(String color, int numOfPassenger, int cargoCapacity, int fuelCapacity) {
         super(color, numOfPassenger, cargoCapacity, fuelCapacity);
+        setTopSpeed(300);
+        setAccelerationCapacity(25);
+        setFuelConsumption(2);  // cars burn a bit more per accelerate
+        setFuelLevel(0);        // starts empty so I need to call refuel() before driving
     }
 
     @Override
     public void start() {
-        System.out.println("The vehicle has started!");
-        this.setSpeed(0);
-        this.setAccelerationCapacity(25);
-        this.setTopSpeed(300);
-
+        System.out.println("The car has started!");
+        setSpeed(0);
     }
+
     @Override
     public void stop(){
-        System.out.println("The vehicle has stopped!");
-        this.speed = 0;
+        System.out.println("The car has stopped!");
+        setSpeed(0);
     }
+
     @Override
     public void accelerate(){
-        if (this.speed >= topSpeed){
+        if (getSpeed() >= getTopSpeed()){
             System.out.println("It is already at top speed!");
+            return;
         }
-        else if (fuelLevel < 0) {
+        if (getFuelLevel() <= 0) {
             System.out.println("Fuel is empty!");
             stop();
-        }else{
-            this.speed += getAccelerationCapacity();
-            fuelLevel -= fuelConsumption;
+            return;
+        }
+        setSpeed(Math.min(getTopSpeed(), getSpeed() + getAccelerationCapacity()));
+        setFuelLevel(getFuelLevel() - Math.max(1, getFuelConsumption()));
+        if (getFuelLevel() == 0) {
+            System.out.println("Fuel ran out!");
+            stop();
         }
     }
-@Override
+
+    @Override
     public void refuel(int fuelAmount){
-        if (fuelAmount + this.fuelLevel <= this.fuelCapacity){
-            this.fuelLevel += fuelAmount;
-        }else{
-            System.out.println("above fuel capacity can not refuel!");
-        }
+        super.refuel(fuelAmount);
     }
 }

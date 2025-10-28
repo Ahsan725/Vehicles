@@ -9,13 +9,19 @@ public class Vehicle {
     private int speed;
     private int accelerationCapacity;
     private int fuelLevel;
-    private int fuelConsumption;
+    private int fuelConsumption; // units of fuel used per accelerate()
 
     public Vehicle(String color, int numOfPassenger, int cargoCapacity, int fuelCapacity) {
         this.color = color;
         this.numOfPassenger = numOfPassenger;
         this.cargoCapacity = cargoCapacity;
         this.fuelCapacity = fuelCapacity;
+        // reasonable defaults
+        this.topSpeed = 100;
+        this.accelerationCapacity = 10;
+        this.fuelLevel = 0;
+        this.fuelConsumption = 1;
+        this.speed = 0;
     }
 
     public int getTopSpeed() {
@@ -31,7 +37,7 @@ public class Vehicle {
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
+        this.speed = Math.max(0, speed);
     }
 
     public int getAccelerationCapacity() {
@@ -39,7 +45,7 @@ public class Vehicle {
     }
 
     public void setAccelerationCapacity(int accelerationCapacity) {
-        this.accelerationCapacity = accelerationCapacity;
+        this.accelerationCapacity = Math.max(0, accelerationCapacity);
     }
 
     public String getColor() {
@@ -71,38 +77,65 @@ public class Vehicle {
     }
 
     public void setFuelCapacity(int fuelCapacity) {
-        this.fuelCapacity = fuelCapacity;
+        this.fuelCapacity = Math.max(0, fuelCapacity);
     }
 
-    public void start(){
+    public int getFuelLevel() {
+        return fuelLevel;
+    }
+
+    public void setFuelLevel(int fuelLevel) {
+        this.fuelLevel = Math.max(0, Math.min(fuelLevel, fuelCapacity));
+    }
+
+    public int getFuelConsumption() {
+        return fuelConsumption;
+    }
+
+    public void setFuelConsumption(int fuelConsumption) {
+        this.fuelConsumption = Math.max(0, fuelConsumption);
+    }
+
+    public void start() {
         System.out.println("The vehicle has started!");
         this.speed = 0;
-        this.accelerationCapacity = 10;
-        this.topSpeed = 100;
     }
 
-    public void stop(){
+    public void stop() {
         System.out.println("The vehicle has stopped!");
         this.speed = 0;
     }
-    public void accelerate(){
-        if (this.speed >= topSpeed){
+
+    public void accelerate() {
+        if (speed >= topSpeed) {
             System.out.println("It is already at top speed!");
+            return;
         }
-        else if (fuelLevel < 0) {
+        if (fuelLevel <= 0) {
             System.out.println("Fuel is empty!");
             stop();
-        }else{
-            this.speed += getAccelerationCapacity();
-            fuelLevel -= fuelConsumption;
+            return;
+        }
+        // accelerate and burn fuel
+        speed = Math.min(topSpeed, speed + accelerationCapacity);
+        int newFuel = fuelLevel - Math.max(1, fuelConsumption);
+        fuelLevel = Math.max(0, newFuel);
+        if (fuelLevel == 0) {
+            System.out.println("Fuel ran out!");
+            stop();
         }
     }
 
-    public void refuel(int fuelAmount){
-        if (fuelAmount + this.fuelLevel <= this.fuelCapacity){
-            this.fuelLevel += fuelAmount;
-        }else{
-            System.out.println("above fuel capacity can not refuel!");
+    public void refuel(int fuelAmount) {
+        if (fuelAmount <= 0) {
+            System.out.println("Refuel amount must be positive.");
+            return;
+        }
+        if (fuelLevel + fuelAmount <= fuelCapacity) {
+            fuelLevel += fuelAmount;
+        } else {
+            fuelLevel = fuelCapacity;
+            System.out.println("Tank is full so extra fuel did not fit.");
         }
     }
 
