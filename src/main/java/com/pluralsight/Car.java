@@ -45,4 +45,19 @@ public class Car extends Vehicle {
     public void refuel(int fuelAmount){
         super.refuel(fuelAmount);
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "color='" + getColor() + '\'' +
+                ", numOfPassenger=" + getNumOfPassenger() +
+                ", cargoCapacity=" + getCargoCapacity() +
+                ", fuelCapacity=" + getFuelCapacity() +
+                ", topSpeed=" + getTopSpeed() +
+                ", speed=" + getSpeed() +
+                ", accelerationCapacity=" + getAccelerationCapacity() +
+                ", fuelLevel=" + getFuelLevel() +
+                ", fuelConsumption=" + getFuelConsumption() +
+                '}';
+    }
 }

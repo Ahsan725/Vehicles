@@ -18,10 +18,6 @@ public class Main {
         System.out.println("\nVEHICLE DRIVING");
         int miles = 0;
         while (miles < 100) {
-            if (vehicle.getFuelLevel() <= 0) {
-                System.out.println("Out of fuel → refuel +5");
-                vehicle.refuel(5);
-            }
             miles += 10;
             System.out.println("Traveled " + miles + " miles");
             vehicle.accelerate();
